@@ -153,6 +153,10 @@ class ImageProcessing{
             }
         }
 
+        save(savePath);
+    }
+
+    public void save(String savePath) throws IOException {
         BufferedImage image = new BufferedImage(pixels.length, pixels[0].length, BufferedImage.TYPE_INT_RGB);
 
         for(int i=0;i<pixels.length;i++){
