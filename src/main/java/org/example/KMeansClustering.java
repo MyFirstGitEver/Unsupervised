@@ -5,11 +5,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 
 public class KMeansClustering {
     private final int minimiseEffort, clusterCount, iterations;
-    private final Vector[] centers, dataset;
+    private Vector[] centers;
+    private final Vector[] dataset;
     public KMeansClustering(int minimiseEffort, int clusterCount, int iterations, Vector[] dataset){
         this.minimiseEffort = minimiseEffort;
         this.clusterCount = clusterCount;
@@ -17,13 +19,9 @@ public class KMeansClustering {
         this.iterations = iterations;
 
         centers = new Vector[clusterCount];
-
-        centers[0] = new Vector(3, 3);
-        centers[1] = new Vector(6, 2);
-        centers[2] = new Vector(8, 5);
-//        for(int i=0;i<clusterCount;i++){
-//            centers[i] = new Vector(dataset[0].size());
-//        }
+        for(int i=0;i<clusterCount;i++){
+            centers[i] = new Vector(dataset[0].size());
+        }
     }
 
     public KMeansClustering(int minimiseEffort, int clusterCount, int iterations, Vector[][] dataset){
@@ -59,10 +57,23 @@ public class KMeansClustering {
         }
     }
 
-    public void train(){
-        for(int i=0;i<minimiseEffort;i++){
-            //randomCenters();
+    public void train() {
+        Vector[] last = null;
+        float cost = Float.MAX_VALUE;
+
+        for(int i=0;i<minimiseEffort;i++) {
+            randomCenters();
             cluster();
+
+            float currCost = cost();
+
+            if(cost > currCost) {
+                last = Arrays.copyOfRange(centers, 0, centers.length);
+                cost = currCost;
+            }
+            else {
+                centers = last;
+            }
         }
     }
 
@@ -101,8 +112,12 @@ public class KMeansClustering {
     public Vector getCenter(int index){
         return centers[index];
     }
-    private void cluster(){
+    private void cluster() {
         for(int a=0;a<iterations;a++){
+            if(a % 40 == 0) {
+                System.out.println(a + " iterations have passed! Cost: " + cost());
+            }
+
             Vector[] newCenters = new Vector[centers.length];
             int[] clusterSize = new int[centers.length];
 

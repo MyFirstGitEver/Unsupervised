@@ -47,7 +47,92 @@ import java.util.List;
 //        detector.validate(validateSet, 1000);
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        ExcelReader reader =new ExcelReader("D:\\live.xlsx");
+
+        List<String> features = new ArrayList<>();
+        features.add("status_id");
+        features.add("status_type");
+        features.add("status_published");
+        features.add("num_reactions");
+        features.add("num_comments");
+        features.add("num_shares");
+        features.add("num_likes");
+        features.add("num_loves");
+        features.add("num_wows");
+        features.add("num_hahas");
+        features.add("num_sads");
+        features.add("num_angrys");
+
+        Pair<Vector, Float>[] dataset = reader.createLabeledDataset(Integer.MAX_VALUE, 0, features);
+
+        featureScaling(dataset, new Pair[0]);
+
+        Vector[] data = new Vector[dataset.length];
+
+        for(int i=0;i<data.length;i++) {
+            data[i] = dataset[i].first;
+        }
+
+        KMeansClustering clustering = new KMeansClustering(5, 2, 1000, data);
+        clustering.train();
+
+        int[] indexes = new int[dataset.length];
+
+        int notGroup0 = 0;
+        for(int i=0;i<dataset.length;i++) {
+            indexes[i] = clustering.clusterNumber(dataset[i].first);
+
+            if(indexes[i] != 0) {
+                notGroup0++;
+            }
+        }
+
+        System.out.println(notGroup0);
+        System.out.println("cost: " + clustering.cost());
+    }
+
+    private static void featureScaling(Pair<Vector, Float>[] trainSet, Pair<Vector, Float>[] testSet) {
+        float[] mean = new float[trainSet[0].first.size()];
+        float[] std = new float[trainSet[0].first.size()];
+
+        for(int i=0;i<mean.length;i++) {
+            for (Pair<Vector, Float> train : trainSet) {
+                mean[i] += train.first.x(i);
+            }
+
+            mean[i] /= trainSet.length;
+        }
+
+        for(int i=0;i<mean.length;i++) {
+            for (Pair<Vector, Float> train : trainSet) {
+                double term = (train.first.x(i) - mean[i]);
+
+                std[i] += term * term;
+            }
+
+            std[i] = (float) Math.sqrt(std[i] / trainSet.length);
+        }
+
+        for (Pair<Vector, Float> train : trainSet) {
+            for (int i = 0; i < trainSet[0].first.size(); i++) {
+                train.first.setX(i, (train.first.x(i) - mean[i]));
+
+                if(std[i] != 0) {
+                    train.first.setX(i, train.first.x(i) / std[i]);
+                }
+            }
+        }
+
+        for (Pair<Vector, Float> test : testSet) {
+            for (int i = 0; i < testSet[0].first.size(); i++) {
+                test.first.setX(i, (test.first.x(i) - mean[i]));
+
+                if(std[i] != 0) {
+                    test.first.setX(i, test.first.x(i) / std[i]);
+                }
+            }
+        }
     }
 
     static Vector[] loadData(String path, int vectorSize) throws IOException {
