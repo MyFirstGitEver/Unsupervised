@@ -58,7 +58,7 @@ public class KMeansClustering {
     }
 
     public void train() {
-        Vector[] last = null;
+        Vector[] minCenters = new Vector[clusterCount];
         float cost = Float.MAX_VALUE;
 
         for(int i=0;i<minimiseEffort;i++) {
@@ -68,13 +68,14 @@ public class KMeansClustering {
             float currCost = cost();
 
             if(cost > currCost) {
-                last = Arrays.copyOfRange(centers, 0, centers.length);
+                for(int j=0;j<minCenters.length;j++) {
+                    minCenters[j] = new Vector(centers[j].getPoints());
+                }
                 cost = currCost;
             }
-            else {
-                centers = last;
-            }
         }
+
+        centers = minCenters;
     }
 
     public float cost(){

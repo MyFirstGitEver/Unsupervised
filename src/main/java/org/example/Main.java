@@ -74,7 +74,7 @@ public class Main {
             data[i] = dataset[i].first;
         }
 
-        KMeansClustering clustering = new KMeansClustering(5, 2, 1000, data);
+        KMeansClustering clustering = new KMeansClustering(5, 3, 1000, data);
         clustering.train();
 
         int[] indexes = new int[dataset.length];

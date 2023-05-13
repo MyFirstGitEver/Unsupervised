@@ -4,12 +4,20 @@ import java.awt.*;
 
 class Vector{
     private final float[] points;
-    Vector(float... points){
-        this.points = points;
+    Vector(float... points) {
+        this.points = new float[points.length];
+
+        for(int i=0;i<points.length;i++) {
+            this.points[i] = points[i];
+        }
     }
 
     Vector(int size){
         points = new float[size];
+    }
+
+    public float[] getPoints() {
+        return points;
     }
 
     public float x(int i){
