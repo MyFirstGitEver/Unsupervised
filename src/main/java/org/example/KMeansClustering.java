@@ -141,6 +141,7 @@ public class KMeansClustering {
         }
     }
 }
+
 class ImageProcessing{
     private final Vector[][] pixels;
     public ImageProcessing(String path) throws IOException {
@@ -184,4 +185,3 @@ class ImageProcessing{
         ImageIO.write(image, "png", new File(savePath));
     }
 }
-

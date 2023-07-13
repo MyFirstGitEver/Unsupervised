@@ -48,48 +48,50 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        ExcelReader reader =new ExcelReader("D:\\live.xlsx");
+//        ExcelReader reader =new ExcelReader("D:\\live.xlsx");
+//
+//        List<String> features = new ArrayList<>();
+//        features.add("status_id");
+//        features.add("status_type");
+//        features.add("status_published");
+//        features.add("num_reactions");
+//        features.add("num_comments");
+//        features.add("num_shares");
+//        features.add("num_likes");
+//        features.add("num_loves");
+//        features.add("num_wows");
+//        features.add("num_hahas");
+//        features.add("num_sads");
+//        features.add("num_angrys");
+//
+//        Pair<Vector, Float>[] dataset = reader.createLabeledDataset(Integer.MAX_VALUE, 0, features);
+//
+//        featureScaling(dataset, new Pair[0]);
+//
+//        Vector[] data = new Vector[dataset.length];
+//
+//        for(int i=0;i<data.length;i++) {
+//            data[i] = dataset[i].first;
+//        }
+//
+//        KMeansClustering clustering = new KMeansClustering(5, 3, 1000, data);
+//        clustering.train();
+//
+//        int[] indexes = new int[dataset.length];
+//
+//        int notGroup0 = 0;
+//        for(int i=0;i<dataset.length;i++) {
+//            indexes[i] = clustering.clusterNumber(dataset[i].first);
+//
+//            if(indexes[i] != 0) {
+//                notGroup0++;
+//            }
+//        }
+//
+//        System.out.println(notGroup0);
+//        System.out.println("cost: " + clustering.cost());
 
-        List<String> features = new ArrayList<>();
-        features.add("status_id");
-        features.add("status_type");
-        features.add("status_published");
-        features.add("num_reactions");
-        features.add("num_comments");
-        features.add("num_shares");
-        features.add("num_likes");
-        features.add("num_loves");
-        features.add("num_wows");
-        features.add("num_hahas");
-        features.add("num_sads");
-        features.add("num_angrys");
 
-        Pair<Vector, Float>[] dataset = reader.createLabeledDataset(Integer.MAX_VALUE, 0, features);
-
-        featureScaling(dataset, new Pair[0]);
-
-        Vector[] data = new Vector[dataset.length];
-
-        for(int i=0;i<data.length;i++) {
-            data[i] = dataset[i].first;
-        }
-
-        KMeansClustering clustering = new KMeansClustering(5, 3, 1000, data);
-        clustering.train();
-
-        int[] indexes = new int[dataset.length];
-
-        int notGroup0 = 0;
-        for(int i=0;i<dataset.length;i++) {
-            indexes[i] = clustering.clusterNumber(dataset[i].first);
-
-            if(indexes[i] != 0) {
-                notGroup0++;
-            }
-        }
-
-        System.out.println(notGroup0);
-        System.out.println("cost: " + clustering.cost());
     }
 
     private static void featureScaling(Pair<Vector, Float>[] trainSet, Pair<Vector, Float>[] testSet) {
